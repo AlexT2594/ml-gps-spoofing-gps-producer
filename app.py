@@ -1,6 +1,7 @@
 import falcon
 from falcon_cors import CORS
 from apis.raw_nmea_producer import RawNmeaProducerAPI
+from apis.test import TestAPI
 
 api = falcon.API()
 
@@ -14,3 +15,4 @@ api = falcon.API(middleware=[public_cors.middleware])
 # describe apis here
 
 api.add_route('/raw_nmea_producer/produce_data', RawNmeaProducerAPI())
+api.add_route('/test', TestAPI())
