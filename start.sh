@@ -1,2 +1,2 @@
 #!/bin/bash
-gunicorn -b 0.0.0.0:8000 --reload app:api
+gunicorn --certfile cert.pem --keyfile key.pem -b 0.0.0.0:8000 --reload app:api
