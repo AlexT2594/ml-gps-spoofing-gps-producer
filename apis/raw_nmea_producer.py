@@ -1,5 +1,6 @@
 import falcon
 import json
+import jwt
 
 from utils.producer_consumer import publish_message, connect_kafka_producer
 
@@ -17,6 +18,18 @@ class RawNmeaProducerAPI:
         }
         """
 
+        res.content_type = falcon.MEDIA_JSON
+        res.status = falcon.HTTP_400
+
+        jwt_token = req.get_header('Authorization')
+        public_key = open('public_jwt_key.pem').read()
+        try:
+            payload = jwt.decode(jwt_token, public_key, algorithms=['RS256'])
+            if payload['sub'] != 'gps_receiver':
+                return
+        except:
+            return
+        
 
         req_data = json.loads(req.stream.read())
         phrase = req_data['data']['phrase']
@@ -34,8 +47,6 @@ class RawNmeaProducerAPI:
             }
         }
 
-        res.content_type = falcon.MEDIA_JSON
-        res.status = falcon.HTTP_200
 
         # we ignore not useful phrases
         if message_ID != "$GPGGA" and message_ID != "$GPGSA" and message_ID != "$GPGSV" and message_ID != "$GPRMC":
@@ -109,5 +120,6 @@ class RawNmeaProducerAPI:
             result_entry = ";".join(self.entry)
 
         result["data"]["entry"] = result_entry
+        res.status = falcon.HTTP_200
         res.media = result
 
