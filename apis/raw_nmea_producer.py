@@ -57,8 +57,8 @@ class RawNmeaProducerAPI:
             self.entry = list(self.entry)
             self.entry.sort(key=lambda phrase: phrase[:10]) #[:10] because we want to sort also the GSV phrases
             
-            print("==> Entry array")
-            print(self.entry)
+            #print("==> Entry array")
+            #print(self.entry)
 
             #we need to check that all $GPGSV entries are present
             for entry_index in range(len(self.entry)):
