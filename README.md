@@ -1,0 +1,3 @@
+# GPS Producer component of the GPS Spoofing Detection System
+
+The main purpose of this component is to retrieve single NMEA phrases and generate entries to be analyzed by the spoofing detection system. A single entry is made of multiple phrases, which are: GPGGA, GPGSA, GPGSV, GPRMC. This means that phrases which don’t belong to these categories are ignored. If an entry doesn’t contain at least the GPGGA phrase, which is a fundamental phrase for positionig, then it’s discarded. The server also removes duplicates, checks for all the GPGSV entries to be present (since it could happen that not all items are present) and ignores entries with the same timestamp as the previous one.
